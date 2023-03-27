@@ -1,15 +1,15 @@
 <?php
 namespace samdark\log\tests;
 
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use samdark\log\PsrTarget;
-use yii\base\InvalidConfigException;
 use yii\log\Dispatcher;
 use yii\log\Logger;
 
-class PsrTargetLevelsTest extends \PHPUnit_Framework_TestCase
+class PsrTargetLevelsTest extends TestCase
 {
-    public function testYiiLevelsDataProvider()
+    public static function yiiLevelsDataProvider(): array
     {
         $context = [
             'category' => 'application',
@@ -66,12 +66,9 @@ class PsrTargetLevelsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider testYiiLevelsDataProvider
-     * @param string $message
-     * @param int $level
-     * @param mixed $expected
+     * @dataProvider yiiLevelsDataProvider
      */
-    public function testYiiLevelsFilter($message, $level, $expected)
+    public function testYiiLevelsFilter(string $message, int|string $level, mixed $expected): void
     {
         $psrLogger = new PsrArrayLogger();
         $logger = new Logger();
@@ -101,7 +98,7 @@ class PsrTargetLevelsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $logEntry);
     }
 
-    public function testPsrLevelsDataProvider()
+    public static function psrLevelsDataProvider(): array
     {
         $context = [
             'category' => 'application',
@@ -175,12 +172,9 @@ class PsrTargetLevelsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider testPsrLevelsDataProvider
-     * @param string $message
-     * @param int $level
-     * @param mixed $expected
+     * @dataProvider psrLevelsDataProvider
      */
-    public function testPsrLevelsFilter($message, $level, $expected)
+    public function testPsrLevelsFilter(string $message, int|string $level, mixed $expected): void
     {
         $psrLogger = new PsrArrayLogger();
         $logger = new Logger();
@@ -210,7 +204,7 @@ class PsrTargetLevelsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $logEntry);
     }
 
-    public function testMixedLevelsDataProvider()
+    public static function mixedLevelsDataProvider(): array
     {
         $context = [
             'category' => 'application',
@@ -251,12 +245,9 @@ class PsrTargetLevelsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider testMixedLevelsDataProvider
-     * @param string $message
-     * @param int $level
-     * @param mixed $expected
+     * @dataProvider mixedLevelsDataProvider
      */
-    public function testMixedLevelsFilter($message, $level, $expected)
+    public function testMixedLevelsFilter(string $message, int|string $level, mixed $expected)
     {
         $psrLogger = new PsrArrayLogger();
         $logger = new Logger();
@@ -285,15 +276,15 @@ class PsrTargetLevelsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $logEntry);
     }
 
-    public function testIncorrectLevelsTypeFilter()
+    public function testIncorrectLevelsTypeFilter(): void
     {
-        $this->setExpectedException('yii\base\InvalidConfigException');
+        self::expectException('yii\base\InvalidConfigException');
         new PsrTarget(['levels' => 'string']);
     }
 
-    public function testIncorrectLevelsFilter()
+    public function testIncorrectLevelsFilter(): void
     {
-        $this->setExpectedException('yii\base\InvalidConfigException');
+        self::expectException('yii\base\InvalidConfigException');
         new PsrTarget(['levels' => ['not existing level']]);
     }
 

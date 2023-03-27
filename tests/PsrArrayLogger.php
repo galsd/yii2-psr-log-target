@@ -14,7 +14,7 @@ class PsrArrayLogger extends AbstractLogger
     /**
      * @inheritdoc
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = array()): void
     {
         $this->logs[] = [
             'level' => $level,
